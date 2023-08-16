@@ -2,6 +2,10 @@
 import { ref } from "vue";
 // Mobile hamburger nav
 const showMobileNav = ref(false);
+
+const hideMobileNav = () => {
+  showMobileNav.value = !showMobileNav.value;
+};
 </script>
 <template>
   <nav class="navbar is-success" role="navigation" aria-label="main navigation">
@@ -30,6 +34,7 @@ const showMobileNav = ref(false);
         id="navbarBasicExample"
         class="navbar-menu"
         :class="{ 'is-active': showMobileNav }"
+        @click="hideMobileNav"
       >
         <div class="navbar-end">
           <RouterLink to="/" class="navbar-item" active-class="is-active">

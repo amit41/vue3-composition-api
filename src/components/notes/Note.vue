@@ -1,11 +1,16 @@
 <script setup>
 import { computed } from "vue";
+import { useRouter } from "vue-router";
+import { useNote } from "../../services/use-note.services";
+
 const props = defineProps({
   note: {
     type: Object,
     required: true,
   },
 });
+
+const router = useRouter();
 
 const contentLength = computed(() => {
   const length = props.note.content.length;
@@ -14,10 +19,14 @@ const contentLength = computed(() => {
   return `${length} ${description}`;
 });
 
-const emit = defineEmits(["onDeleteNote"]);
+const noteService = useNote();
 
 const onDeleteNote = () => {
-  emit("onDeleteNote", props.note.id);
+  noteService.deleteNote(props.note.id);
+};
+
+const onEditNote = () => {
+  router.push({ name: "editNote", params: { id: props.note.id } });
 };
 </script>
 <template>
@@ -31,7 +40,7 @@ const onDeleteNote = () => {
       </div>
     </div>
     <footer class="card-footer">
-      <a href="#" class="card-footer-item">Edit</a>
+      <a href="#" class="card-footer-item" @click.prevent="onEditNote">Edit</a>
       <a
         href="#"
         class="card-footer-item has-text-danger-dark"

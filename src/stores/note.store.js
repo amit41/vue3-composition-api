@@ -18,6 +18,30 @@ export const useNoteStore = defineStore("note", {
       ],
     };
   },
+  getters: {
+    getNoteById(state) {
+      return (id) => {
+        const searchedNote = state.notes.find(
+          (note) => note.id === parseInt(id)
+        );
+        if (searchedNote) {
+          return searchedNote.content;
+        } else {
+          return "";
+        }
+      };
+    },
+    getTotalNotes: (state) => {
+      return state.notes.length;
+    },
+    getTotalCharacters: (state) => {
+      let total = 0;
+      state.notes.forEach((note) => {
+        total += note.content.length;
+      });
+      return total;
+    },
+  },
   actions: {
     addNote(newNoteContent) {
       const note = {
@@ -30,6 +54,14 @@ export const useNoteStore = defineStore("note", {
       this.notes = this.notes.filter((note) => {
         return note.id !== id;
       });
+    },
+    updateNote(id, content) {
+      const index = this.notes.findIndex((note) => note.id === parseInt(id));
+      if (index > -1) {
+        this.notes[index].content = content;
+      } else {
+        console.log(`Note with id: ${id} not found.`);
+      }
     },
   },
 });
